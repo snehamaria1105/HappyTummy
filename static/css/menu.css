@@ -33,7 +33,7 @@ body {
 
 .brand-colored {
     font-weight: 800;
-    color: #eeb44b;
+    color: #FFAA00;
 }
 
 .nav-items {
@@ -236,7 +236,7 @@ body {
 .menu-price {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #eeb44b;
+    color: #FFAA00;
     /* Yellow theme color */
 }
 
@@ -253,7 +253,7 @@ body {
 }
 
 .btn-add-cart {
-    background-color: #eeb44b;
+    background-color: #FFAA00;
     /* Yellow/Orange theme */
     color: #fff;
     border: none;

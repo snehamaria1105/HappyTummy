@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up | HappyTummy</title>
+    <!-- External Links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/auth.css">
+</head>
+
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="landing.html" class="nav-brand">
+            <span class="brand-bold">Happy</span><span class="brand-colored">Tummy</span>
+        </a>
+        <div class="nav-items">
+            <a href="landing.html" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+            <a href="menu.html" class="nav-link"><i class="fa-solid fa-utensils"></i> <span>Menu</span></a>
+            <a href="cart.html" class="nav-link"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
+        </div>
+    </nav>
+
+    <!-- Authentication Section -->
+    <section class="auth-wrapper">
+        <div class="auth-container">
+
+            <!-- Beautiful Side Image -->
+            <div class="auth-image-panel">
+                <div class="auth-image-overlay"></div>
+                <div class="auth-image-content">
+                    <h2>Welcome to HappyTummy</h2>
+                    <p>Discover the finest local dining delivered reliably to your doorstep.</p>
+                </div>
+            </div>
+
+            <!-- Authenticaton Form Panel -->
+            <div class="auth-form-panel">
+
+                <!-- LOGIN FORM -->
+                <div class="auth-form-wrapper" id="login-form">
+                    <div class="form-header">
+                        <h2>Welcome Back</h2>
+                        <p>Please enter your credentials to login</p>
+                    </div>
+
+                    <form action="#" method="POST">
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-envelope"></i>
+                                <input type="email" class="input-field" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Password</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" class="input-field" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+
+                        <div class="form-extras">
+                            <label class="remember-me">
+                                <input type="checkbox"> Remember me
+                            </label>
+                            <a href="#" class="forgot-pwd">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-auth">Login</button>
+                    </form>
+
+                    <div class="auth-switch">
+                        Don't have an account? <a href="#" id="go-to-signup">Sign up</a>
+                    </div>
+                </div>
+
+                <!-- SIGNUP FORM -->
+                <div class="auth-form-wrapper" id="signup-form">
+                    <div class="form-header">
+                        <h2>Create Account</h2>
+                        <p>Join us to explore delicious meals</p>
+                    </div>
+
+                    <form action="#" method="POST">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-user"></i>
+                                <input type="text" class="input-field" placeholder="John Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-envelope"></i>
+                                <input type="email" class="input-field" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Password</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" class="input-field" placeholder="Create a strong password"
+                                    required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-auth">Sign Up</button>
+                    </form>
+
+                    <div class="auth-switch">
+                        Already have an account? <a href="#" id="go-to-login">Login</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript to toggle forms cleanly -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const goToSignup = document.getElementById('go-to-signup');
+            const goToLogin = document.getElementById('go-to-login');
+
+            // Icon highlight on focus
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.classList.add('focus-active');
+                });
+                input.addEventListener('blur', () => {
+                    input.parentElement.classList.remove('focus-active');
+                });
+            });
+
+            // Toggle logic
+            goToSignup.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+            });
+
+            goToLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+
+</html>
