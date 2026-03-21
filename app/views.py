@@ -15,9 +15,9 @@ def landing():
 def auth():
     """Handles both GET viewing of the login page, and POST submissions for Login/Signup."""
     
-    # If a user is already securely logged in via session, redirect them to the menu
+    # If a user is already securely logged in via session, redirect them to the restaurants page
     if 'customer_id' in session:
-        return redirect(url_for('menu'))
+        return redirect(url_for('restaurants'))
 
     if request.method == 'POST':
         action = request.form.get('action') # Distinguishes if form was Login or Signup
@@ -33,7 +33,7 @@ def auth():
                 session['customer_id'] = user['customerId']
                 session['user_name'] = user['fname']
                 flash('Successfully logged in!', 'success')
-                return redirect(url_for('menu'))
+                return redirect(url_for('restaurants'))
             else:
                 flash('Invalid credentials. Please try again.', 'error')
                 
@@ -65,12 +65,28 @@ def logout():
     return redirect(url_for('landing'))
 
 
-@app.route('/menu')
-def menu():
-    """Fetches real-time DB menu rows and passes them into our HTML."""
-    items = models.get_all_menu_items()
-    # Sending 'items' dictionary to Jinja engine inside menu.html
-    return render_template('menu.html', menu_items=items)
+@app.route('/restaurants')
+def restaurants():
+    """Fetches all restaurant listings and serves the homedemo.html browse page."""
+    if 'customer_id' not in session:
+        flash('Please login to view restaurants.', 'error')
+        return redirect(url_for('auth'))
+    
+    restaurant_list = models.get_all_restaurants()
+    return render_template('homedemo.html', restaurants=restaurant_list)
+
+
+@app.route('/menu/<int:restaurant_id>')
+def menu(restaurant_id):
+    """Fetches targeted DB menu rows for a specific restaurant and passes them into our HTML."""
+    if 'customer_id' not in session:
+        return redirect(url_for('auth'))
+        
+    restaurant = models.get_restaurant_by_id(restaurant_id)
+    items = models.get_menu_items_by_restaurant(restaurant_id)
+    
+    # Send variables to Jinja engine inside menu.html
+    return render_template('menu.html', restaurant=restaurant, menu_items=items)
 
 
 @app.route('/cart')
@@ -103,4 +119,5 @@ def add_cart():
     models.add_to_cart(session['customer_id'], item_id, quantity, price)
     
     flash('Item added to cart!', 'success')
-    return redirect(url_for('menu'))
+    # Use request.referrer to elegantly bump the user exactly back to the menu they were looking at
+    return redirect(request.referrer or url_for('restaurants'))

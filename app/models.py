@@ -13,10 +13,30 @@ def get_db_connection():
         database=app.config['DB_NAME']
     )
 
-def get_all_menu_items():
+def get_all_restaurants():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True) # dictionary=True makes rows come back as Python dicts instead of lists
-    cursor.execute("SELECT * FROM MENU_ITEMS")
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM RESTAURANT")
+    restaurants = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    return restaurants
+
+def get_restaurant_by_id(restaurant_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM RESTAURANT WHERE restaurantId = %s", (restaurant_id,))
+    restaurant = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+    return restaurant
+
+def get_menu_items_by_restaurant(restaurant_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM MENU_ITEMS WHERE restaurantId = %s", (restaurant_id,))
     items = cursor.fetchall()
     
     cursor.close()
