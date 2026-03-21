@@ -117,7 +117,7 @@ def get_cart_items(customer_id):
     
     # A powerful JOIN linking the user's numeric `itemId` internally against `MENU_ITEMS` to scrape names and images
     sql = """
-        SELECT c.cartId, c.quantity, c.totalAmount, m.itemName, m.price, m.imageurl, m.itemId
+        SELECT c.cartId, c.quantity, c.totalAmount, m.itemName, m.price, m.imageurl, m.itemId, m.restaurantId
         FROM CART c
         JOIN MENU_ITEMS m ON c.itemId = m.itemId
         WHERE c.customerId = %s
@@ -128,3 +128,74 @@ def get_cart_items(customer_id):
     cursor.close()
     conn.close()
     return cart_items
+
+
+def place_order(customer_id, payment_mode):
+    """
+    This is an advanced highly-secure MySQL Transaction block. 
+    It executes 5 steps successively, and rolls back EVERY change instantly if anything fails, preventing stray data!
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        # Step 1: Query all current cart items directly from DB to prevent client-side cart spoofing
+        sql = """
+            SELECT c.quantity, c.totalAmount, m.itemId, m.price, m.restaurantId
+            FROM CART c
+            JOIN MENU_ITEMS m ON c.itemId = m.itemId
+            WHERE c.customerId = %s
+        """
+        cursor.execute(sql, (customer_id,))
+        cart_items = cursor.fetchall()
+        
+        if not cart_items:
+            raise Exception("Cart is completely empty!")
+            
+        # Securely recalculate the total amount server-side 
+        # (We assume an order binds to the restaurant of the primary item based on schema constraints)
+        total_order_amount = sum(float(item['totalAmount']) for item in cart_items)
+        restaurant_id = cart_items[0]['restaurantId']
+        
+        from datetime import datetime
+        now = datetime.now()
+        
+        # Step 2: Log into ORDERS table
+        order_sql = """
+            INSERT INTO ORDERS (timestamp, totalAmount, status, customerId, restaurantId)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(order_sql, (now, total_order_amount, 'Preparing', customer_id, restaurant_id))
+        order_id = cursor.lastrowid # Grabs the auto-increment ID to link subsequent tables precisely!
+        
+        # Step 3: Iterate through cart and map rows individually into ORDER_DETAILS table
+        for item in cart_items:
+            detail_sql = """
+                INSERT INTO ORDER_DETAILS (quantity, price, itemId, orderId)
+                VALUES (%s, %s, %s, %s)
+            """
+            cursor.execute(detail_sql, (item['quantity'], item['price'], item['itemId'], order_id))
+            
+        # Step 4: Construct the final BILLING receipt sequence record
+        billing_sql = """
+            INSERT INTO BILLING (orderId, mode, totalAmount, timestamp)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(billing_sql, (order_id, payment_mode, total_order_amount, now))
+        
+        # Step 5: Beautifully wipe out the user's cart since they paid
+        clear_cart_sql = "DELETE FROM CART WHERE customerId = %s"
+        cursor.execute(clear_cart_sql, (customer_id,))
+        
+        # Important: Lock and finalize the transaction to Database only once ALL lines execute securely!
+        conn.commit()
+        return True, order_id
+        
+    except Exception as e:
+        print(f"Transaction Order Error: {e}")
+        # Panic mode: Revert all incomplete DB rows instantly if it crashes anywhere (like if their card declined)
+        conn.rollback() 
+        return False, None
+    finally:
+        cursor.close()
+        conn.close()

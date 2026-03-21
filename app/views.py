@@ -121,3 +121,22 @@ def add_cart():
     flash('Item added to cart!', 'success')
     # Use request.referrer to elegantly bump the user exactly back to the menu they were looking at
     return redirect(request.referrer or url_for('restaurants'))
+
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    """Triggered strictly from the shopping cart. Flushes items and generates the order receipt natively."""
+    if 'customer_id' not in session:
+        return redirect(url_for('auth'))
+        
+    # We grab the payment method, defaulting to standard if they bypass the form
+    payment_mode = request.form.get('payment_mode', 'Online Transfer')
+    
+    # Hand the logic off to our secure transaction block
+    success, order_id = models.place_order(session['customer_id'], payment_mode)
+    
+    if success:
+        return render_template('orderPlaced.html', order_id=order_id)
+    else:
+        flash('There was an issue processing your order internally. Please try checking out again.', 'error')
+        return redirect(url_for('cart'))
