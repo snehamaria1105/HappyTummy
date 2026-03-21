@@ -1,141 +1,341 @@
-/* 1. Page Setup */
+/* Page Setup */
 body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f6f8;
+    font-family: 'Segoe UI', Georgia, 'Times New Roman', Times, serif, Helvetica, Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-}
-
-.menu-title {
-    text-align: center;
-    font-size: 2.5rem;
+    padding: 0;
+    /* Removed padding to allow hero image to touch edges */
     color: #333;
-    margin-bottom: 40px;
 }
 
-/* 1. The Grid Container - This creates the 2-column layout */
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Exactly 2 columns */
-    gap: 20px;                             /* Space between cards */
-    max-width: 1300px;                     /* Wider container to fit 2 cards */
-    margin: 0 auto;
-    padding: 10px;
-}
-
-/* 2. The Card - Three-Column Flexbox */
-.menu-card {
+/* Navigation Bar */
+.navbar {
     display: flex;
-    align-items: center;      /* Vertically centers all elements */
     justify-content: space-between;
-    background: #fff;
-    padding: 15px;            /* Slightly reduced padding to fit better */
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-/* The left section (Image + Name) */
-.card-main {
-    display: flex;
-    flex-direction: column;   /* Stacks Name under Image */
-    align-items: center;      /* Centers the text under the image */
-    text-align: center;
-}
-.menu-card:hover {
-    transform: translateY(-5px);
+.nav-brand {
+    text-decoration: none;
+    font-size: 1.8rem;
 }
 
-
-/* Image on the Left */
-.image-container {
-    flex-shrink: 0; /* Prevents image from getting squished */
-    margin-right: 25px;
-}
-
-.image-container img {
-    width: 90px;              /* Slightly smaller to fit 2-per-row */
-    height: 90px;
-    border-radius: 12px;
-    object-fit: cover;
-    display: block;
-}
-
-.card-main h3 {
-    margin: 0;
-    font-size: 1.1rem;
+.brand-bold {
+    font-weight: 800;
     color: #333;
 }
 
-/* The right section (Button) */
-/* Container for both buttons on the right */
-.card-actions {
+.brand-colored {
+    font-weight: 800;
+    color: #eeb44b;
+}
+
+.nav-items {
     display: flex;
-    flex-direction: column; 
-    gap: 12px;              /* Space between Read More and Add to Cart */
-    margin-left: 20px;
-    align-items: center;    /* Keeps buttons centered relative to each other */
+    gap: 30px;
 }
 
-/* Ensure both buttons have the same width for a clean look */
-.menu-btn, .cart-container {
-    width: 120px; 
-}
-
-/* Center: Name */
-.menu-card h3 {
-    flex: 1;                  /* Takes up the middle space */
-    margin: 0;
-    padding: 0 15px;          /* Gap between image and buttons */
-    font-size: 1rem;
-    color: #333;
-}
-
-/* Right: Button Column */
-.card-actions {
-    display: flex;
-    flex-direction: column;   /* Stacks Read More and Add to Cart */
-    gap: 8px;
-    min-width: 110px;         /* Fixed width for buttons */
-}
-
-/* Buttons */
-.menu-btn, .cart-btn, .quantity-controls {
-    width: 100%;
-    height: 34px;             /* Slightly shorter for 2-column view */
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: bold;
+.nav-link {
+    text-decoration: none;
+    color: #444;
+    font-weight: 600;
+    font-size: 1.05rem;
     display: flex;
     align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #eeb44b;
+}
+
+/* Menu Header (Hero) */
+.menu-hero {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    background: url('../images/menuHeader.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
     justify-content: center;
-    cursor: pointer;
-    border: none;
-    text-decoration: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
-.menu-btn { background-color: #eeb44b; color: white; }
-.cart-btn { background-color: #333; color: white; }
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1))
+    z-index: 1;
+}
 
-/* Counter (- 1 +) */
-.quantity-controls {
-    background: #333;
-    color: white;
+.hero-text {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    margin: 0;
+    padding: 0 20px;
+}
+
+/* Menu Section */
+.menu-section {
+    /* Span left to right with appropriate margin */
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+/* Controls */
+.menu-controls {
+    display: flex;
     justify-content: space-between;
-    padding: 0 8px;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.quantity-controls button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.1rem;
+.search-box {
+    flex: 1;
+    max-width: 400px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-box:focus {
+    border-color: #eeb44b;
+    box-shadow: 0 0 5px rgba(238, 180, 75, 0.3);
+}
+
+/* Veg Toggle Switch */
+.veg-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #444;
 }
 
-/* 3. Mobile Responsive - Switch to 1 column on small screens */
-@media (max-width: 900px) {
-    .menu-grid {
-        grid-template-columns: 1fr;
+.toggle-checkbox {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 46px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 24px;
+    transition: 0.3s;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.toggle-checkbox:checked+.toggle-slider {
+    background-color: #2e8b57;
+    /* Green for veg */
+}
+
+.toggle-checkbox:checked+.toggle-slider::before {
+    transform: translateX(22px);
+}
+
+/* Vertical List */
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Horizontal Card Structure */
+.menu-card {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-items: center;
+    padding: 15px;
+    gap: 20px;
+    border: 1px solid #eee;
+    width: 100%;
+    /* Make card fit the width of its container (menu-section) left to right */
+    box-sizing: border-box;
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Image on left */
+.menu-image {
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Content on right */
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.menu-name {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.menu-price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #eeb44b;
+    /* Yellow theme color */
+}
+
+.menu-description {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Action button */
+.menu-actions {
+    display: flex;
+}
+
+.btn-add-cart {
+    background-color: #eeb44b;
+    /* Yellow/Orange theme */
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-add-cart:hover {
+    background-color: #dca337;
+    transform: scale(1.02);
+}
+
+.btn-add-cart:active {
+    transform: scale(0.98);
+}
+
+/* Responsive design - Mobile layout */
+@media (max-width: 600px) {
+    .menu-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+    }
+
+    .menu-image {
+        width: 100%;
+        height: 200px;
+        border-radius: 12px 12px 0 0;
+        margin-right: 0;
+    }
+
+    .menu-content {
+        padding: 20px;
+    }
+
+    .menu-description {
+        margin-bottom: 20px;
+    }
+
+    .nav-items {
+        gap: 15px;
+    }
+
+    .nav-link span {
+        display: none;
+        /* Show icons only on mobile */
+    }
+
+    .nav-link {
+        font-size: 1.25rem;
+    }
+
+    .menu-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px;
+    }
+
+    .menu-hero {
+        height: 200px;
+    }
+
+    .hero-text {
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+    }
+
+    .menu-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        max-width: unset;
+        /* Expand search bar completely on mobile */
     }
 }

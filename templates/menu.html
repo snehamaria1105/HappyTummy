@@ -1,202 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>menuy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href="menu.css">
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../static/css/menu.css">
 </head>
 
 <body>
-<section class="menu-section">
-  <h1 class="menu-title">View Our Menu</h1>
-  
-  <div class="menu-grid">
-    <div class="menu-card">
-      <div class="image-container">
-        <img src="HawaiianPizza (1).jpg" alt="Hawaiian Pizza">
-      </div>
-      <h3>Hawaiian Pizza</h3>
-      <div class="card-actions">
-        <a href="#" class="menu-btn">READ MORE</a>
-        
-        <div class="cart-container">
-            <button class="cart-btn" onclick="handleAddToCart(this)">ADD TO CART</button>
-            
-            <div class="quantity-controls" style="display: none;">
-                <button class="minus-btn" onclick="updateQty(this, -1)">-</button>
-                <span class="qty-number">1</span>
-                <button class="plus-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <a href="landing.html" class="nav-brand">
+      <span class="brand-bold">Happy</span><span class="brand-colored">Tummy</span>
+    </a>
+    <div class="nav-items">
+      <a href="landing.html" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+      <a href="#" class="nav-link"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
+      <a href="#" class="nav-link"><i class="fa-solid fa-user"></i> <span>Account</span></a>
+    </div>
+  </nav>
+
+  <header class="menu-hero">
+    <div class="hero-overlay"></div>
+    <h1 class="hero-text">Explore Our Flavours</h1>
+  </header>
+
+  <section class="menu-section">
+
+    <div class="menu-controls">
+      <input type="text" id="searchInput" class="search-box" placeholder="Search menu items...">
+      <label class="veg-toggle-container">
+        <span class="toggle-label">Veg Only</span>
+        <input type="checkbox" id="vegToggle" class="toggle-checkbox">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="menu-list">
+
+      <div class="menu-card" data-veg="false">
+        <img src="../static/images/HawaiianPizza (1).jpg" alt="Hawaiian Pizza" class="menu-image">
+        <div class="menu-content">
+          <div class="menu-header">
+            <h3 class="menu-name">Hawaiian Pizza</h3>
+            <span class="menu-price">$12.99</span>
+          </div>
+          <p class="menu-description">A tropical classic! Topped with savory ham, sweet pineapple, and extra mozzarella
+            cheese on a freshly baked crust.</p>
+          <div class="menu-actions">
+            <button class="btn-add-cart" type="button">Add to Cart</button>
+          </div>
         </div>
-    </div>
-</div>
-    </div>
-
-    <div class="menu-card">
-      <div class="image-container">
-        <img src="vegPizza.jpg" alt="vegPizza">
       </div>
-      <h3>VegPizza</h3>
-       <div class="card-actions">
-        <a href="#" class="menu-btn">READ MORE</a>
-        
-        <div class="cart-container">
-            <button class="cart-btn" onclick="handleAddToCart(this)">ADD TO CART</button>
-            
-            <div class="quantity-controls" style="display: none;">
-                <button class="minus-btn" onclick="updateQty(this, -1)">-</button>
-                <span class="qty-number">1</span>
-                <button class="plus-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
-    </div>
-</div>
-    </div>
 
-    <div class="menu-card">
-      <div class="image-container">
-        <img src="bbqPizza (1).jpg" alt="bbqPizza">
+      <div class="menu-card" data-veg="true">
+        <img src="../static/images/vegPizza.jpg" alt="Veg Pizza" class="menu-image">
+        <div class="menu-content">
+          <div class="menu-header">
+            <h3 class="menu-name">Veg Pizza</h3>
+            <span class="menu-price">$10.99</span>
+          </div>
+          <p class="menu-description">A garden delight featuring fresh bell peppers, red onions, mushrooms, and black
+            olives over rich tomato sauce.</p>
+          <div class="menu-actions">
+            <button class="btn-add-cart" type="button">Add to Cart</button>
+          </div>
+        </div>
       </div>
-      <h3>BbqPizza</h3>
-       <div class="card-actions">
-        <a href="#" class="menu-btn">READ MORE</a>
-        
-        <div class="cart-container">
-            <button class="cart-btn" onclick="handleAddToCart(this)">ADD TO CART</button>
-            
-            <div class="quantity-controls" style="display: none;">
-                <button class="minus-btn" onclick="updateQty(this, -1)">-</button>
-                <span class="qty-number">1</span>
-                <button class="plus-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
-    </div>
-</div>
-    </div>
 
-    <div class="menu-card">
-      <div class="image-container">
-        <img src="cheesyPizza.jpg" alt="Cheezy Pizza">
+      <div class="menu-card" data-veg="false">
+        <img src="../static/images/bbqPizza (1).jpg" alt="BBQ Pizza" class="menu-image">
+        <div class="menu-content">
+          <div class="menu-header">
+            <h3 class="menu-name">BBQ Pizza</h3>
+            <span class="menu-price">$14.49</span>
+          </div>
+          <p class="menu-description">Tangy BBQ sauce topped with grilled chicken, red onions, and a touch of cilantro
+            for the perfect smoky flavor.</p>
+          <div class="menu-actions">
+            <button class="btn-add-cart" type="button">Add to Cart</button>
+          </div>
+        </div>
       </div>
-      <h3>Cheezy Pizza</h3>
-       <div class="card-actions">
-        <a href="#" class="menu-btn">READ MORE</a>
-        
-        <div class="cart-container">
-            <button class="cart-btn" onclick="handleAddToCart(this)">ADD TO CART</button>
-            
-            <div class="quantity-controls" style="display: none;">
-                <button class="minus-btn" onclick="updateQty(this, -1)">-</button>
-                <span class="qty-number">1</span>
-                <button class="plus-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
-    </div>
-</div>
-    </div>
 
-    <div class="menu-card">
-      <div class="image-container">
-        <img src="meatLoversPizza (1).jpg" alt="meatLoversPizza">
+      <div class="menu-card" data-veg="true">
+        <img src="../static/images/cheesyPizza.jpg" alt="Cheezy Pizza" class="menu-image">
+        <div class="menu-content">
+          <div class="menu-header">
+            <h3 class="menu-name">Cheezy Pizza</h3>
+            <span class="menu-price">$11.99</span>
+          </div>
+          <p class="menu-description">For the cheese lovers! Delicious pizza featuring a blend of four cheeses melted to
+            perfection.</p>
+          <div class="menu-actions">
+            <button class="btn-add-cart" type="button">Add to Cart</button>
+          </div>
+        </div>
       </div>
-      <h3>MeatLoversPizza</h3>
-       <div class="card-actions">
-        <a href="#" class="menu-btn">READ MORE</a>
-        
-        <div class="cart-container">
-            <button class="cart-btn" onclick="handleAddToCart(this)">ADD TO CART</button>
-            
-            <div class="quantity-controls" style="display: none;">
-                <button class="minus-btn" onclick="updateQty(this, -1)">-</button>
-                <span class="qty-number">1</span>
-                <button class="plus-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
+
+      <div class="menu-card" data-veg="false">
+        <img src="../static/images/meatLoversPizza (1).jpg" alt="Meat Lovers Pizza" class="menu-image">
+        <div class="menu-content">
+          <div class="menu-header">
+            <h3 class="menu-name">Meat Lovers Pizza</h3>
+            <span class="menu-price">$15.99</span>
+          </div>
+          <p class="menu-description">Hearty and filling! Packed to the brim with pepperoni, sausage, bacon, and
+            seasoned ground beef.</p>
+          <div class="menu-actions">
+            <button class="btn-add-cart" type="button">Add to Cart</button>
+          </div>
         </div>
-    </div>
-</div>
-    </div>
-  </div>
-</section>
+      </div>
 
-<div id="pizzaModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2 id="modalTitle"></h2>
-    <p id="modalDescription"></p>
-  </div>
-</div>
+    </div>
+  </section>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchInput');
+      const vegToggle = document.getElementById('vegToggle');
+      const menuCards = document.querySelectorAll('.menu-card');
+
+      function filterMenu() {
+        const query = searchInput.value.toLowerCase();
+        const vegOnly = vegToggle.checked;
+
+        menuCards.forEach(card => {
+          const name = card.querySelector('.menu-name').textContent.toLowerCase();
+          const desc = card.querySelector('.menu-description').textContent.toLowerCase();
+          const isVeg = card.dataset.veg === 'true';
+
+          const matchesSearch = name.includes(query) || desc.includes(query);
+          const matchesVeg = vegOnly ? isVeg : true;
+
+          if (matchesSearch && matchesVeg) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      searchInput.addEventListener('input', filterMenu);
+      vegToggle.addEventListener('change', filterMenu);
+    });
+  </script>
 </body>
+
 </html>
-
-<script>
-// 1. Create a "Library" of your pizza descriptions
-const pizzaInfo = {
-  "Hawaiian Pizza": "A tropical classic! Topped with savory ham, sweet pineapple, and extra mozzarella cheese.",
-  "VegPizza": "A garden delight featuring fresh bell peppers, red onions, mushrooms, and black olives.",
-  "BbqPizza": "Tangy BBQ sauce topped with grilled chicken, red onions, and a touch of cilantro.",
-  "Cheezy Pizza": "For the cheese lovers! Pizza with four cheesy layers.",
-  "MeatLoversPizza": "Hearty and filling! Packed with pepperoni, sausage, bacon, and ground beef."
-};
-
-// 2. Get the Modal elements from the page
-const modal = document.getElementById("pizzaModal");
-const title = document.getElementById("modalTitle");
-const description = document.getElementById("modalDescription");
-const closeBtn = document.querySelector(".close-btn");
-
-// 3. Tell the buttons to listen for a click
-document.querySelectorAll('.menu-btn').forEach(button => {
-  button.addEventListener('click', (event) => {
-    event.preventDefault(); // Prevents the page from jumping
-    
-    // Get the name of the pizza from the <h3> tag in the card
-    const pizzaName = button.parentElement.querySelector('h3').innerText;
-    
-    // Put the name and description into the modal
-    title.innerText = pizzaName;
-    description.innerText = pizzaInfo[pizzaName] || "Delicious fresh pizza!";
-    
-    // Show the modal!
-    modal.style.display = "block";
-  });
-});
-
-// 4. Close the modal when 'X' is clicked
-closeBtn.onclick = () => modal.style.display = "none";
-
-// 5. Close the modal if the user clicks anywhere outside the white box
-window.onclick = (event) => {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-function handleAddToCart(btn) {
-    const container = btn.parentElement;
-    const controls = container.querySelector('.quantity-controls');
-    
-    btn.style.display = 'none';      
-    controls.style.display = 'flex'; 
-}
-
-function updateQty(btn, change) {
-    const qtySpan = btn.parentElement.querySelector('.qty-number');
-    const container = btn.closest('.cart-container');
-    const addBtn = container.querySelector('.cart-btn');
-    const controls = container.querySelector('.quantity-controls');
-    
-    let currentQty = parseInt(qtySpan.innerText);
-    let newQty = currentQty + change;
-
-    if (newQty > 0) {
-        qtySpan.innerText = newQty;
-    } else {
-        // Switch back to "ADD TO CART" if quantity hits 0
-        qtySpan.innerText = 1; 
-        controls.style.display = 'none';
-        addBtn.style.display = 'block';
-    }
-}
-</script>
