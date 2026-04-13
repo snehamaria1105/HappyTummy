@@ -17,8 +17,14 @@
             <i class="fas fa-check"></i>
         </div>
         <h1>Order Placed Successfully!</h1>
-        <p><i>Thank you for your order. Your food will be delivered soon.</i></p>
-        <a href="/restaurants" class="back-btn">Back to Home</a>
+        <div style="margin: 30px 0;">
+            <a href="/bill/{{ order_id }}" class="back-btn"
+                style="background:#FFAA00; color:#fff; border:none; border-radius:4px; padding:12px 25px; font-weight:bold; display:inline-block; margin-right:15px; text-decoration:none; box-shadow:0 4px 10px rgba(255,170,0,0.3);"><i
+                    class="fa-solid fa-file-invoice" style="margin-right:8px;"></i> View & Download E-Bill</a>
+            <a href="/restaurants" class="back-btn"
+                style="background:#f4f4f4; color:#444; border:1px solid #ddd; border-radius:4px; padding:12px 25px; font-weight:bold; display:inline-block; text-decoration:none;"><i
+                    class="fa-solid fa-utensils" style="margin-right:8px;"></i> Continue Shopping</a>
+        </div>
     </div>
 </body>
 

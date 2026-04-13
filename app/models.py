@@ -143,12 +143,13 @@ def get_order_history(customer_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
-    # Grab main orders sorted by latest
+    # Grab main orders sorted by latest, pulling explicit restaurant metadata safely
     sql = """
-        SELECT orderId, timestamp, totalAmount, status
-        FROM ORDERS 
-        WHERE customerId = %s
-        ORDER BY timestamp DESC
+        SELECT o.orderId, o.timestamp, o.totalAmount, o.status, o.restaurantId, r.restaurantName
+        FROM ORDERS o
+        JOIN RESTAURANT r ON o.restaurantId = r.restaurantId
+        WHERE o.customerId = %s
+        ORDER BY o.timestamp DESC
     """
     cursor.execute(sql, (customer_id,))
     orders = cursor.fetchall()
@@ -168,9 +169,84 @@ def get_order_history(customer_id):
         item_strings = [f"{it['itemName']} x{it['quantity']}" for it in items]
         order['items_summary'] = ", ".join(item_strings)
         
+        # Pull any existing review for this exact restaurant by this exact user
+        review_sql = """
+            SELECT rating, reviewText 
+            FROM RATING 
+            WHERE customerId = %s AND restaurantId = %s
+            LIMIT 1
+        """
+        cursor.execute(review_sql, (customer_id, order['restaurantId']))
+        existing_review = cursor.fetchone()
+        
+        if existing_review:
+            order['existing_rating'] = existing_review['rating']
+            order['existing_review'] = existing_review['reviewText']
+        else:
+            order['existing_rating'] = None
+        
     cursor.close()
     conn.close()
     return orders
+
+def get_order_receipt(order_id, customer_id):
+    """Deeply inspects an explicit transaction dynamically returning cleanly nested invoice datasets mapping all 4 required tables!"""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    sql = """
+        SELECT o.orderId, o.timestamp, o.totalAmount as orderTotal, o.status,
+               b.mode as paymentMode, b.billingId,
+               c.fname, c.lname, c.phone, c.houseName, c.street, c.city, c.pincode,
+               r.restaurantName, r.location
+        FROM ORDERS o
+        LEFT JOIN BILLING b ON o.orderId = b.orderId
+        JOIN CUSTOMER c ON o.customerId = c.customerId
+        JOIN RESTAURANT r ON o.restaurantId = r.restaurantId
+        WHERE o.orderId = %s AND o.customerId = %s
+    """
+    cursor.execute(sql, (order_id, customer_id))
+    receipt = cursor.fetchone()
+    
+    if not receipt:
+        cursor.close()
+        conn.close()
+        return None
+        
+    # Inject exact granular line-items 
+    item_sql = """
+        SELECT m.itemName, od.quantity, od.price 
+        FROM ORDER_DETAILS od
+        JOIN MENU_ITEMS m ON od.itemId = m.itemId
+        WHERE od.orderId = %s
+    """
+    cursor.execute(item_sql, (order_id,))
+    receipt['order_items'] = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    return receipt
+
+def submit_review(customer_id, restaurant_id, rating, review_text):
+    """Safely drops granular customer feedback permanently mapped back explicitly to their Restaurant Entity natively hitting the existing scale RATING schema"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Block redundant duplications preventing user-spam by intelligently transforming duplicates natively into Upserts
+    cursor.execute("SELECT ratingId FROM RATING WHERE customerId = %s AND restaurantId = %s LIMIT 1", (customer_id, restaurant_id))
+    if cursor.fetchone():
+        sql = "UPDATE RATING SET rating = %s, reviewText = %s WHERE customerId = %s AND restaurantId = %s"
+        cursor.execute(sql, (rating, review_text, customer_id, restaurant_id))
+    else:
+        sql = """
+            INSERT INTO RATING (customerId, restaurantId, rating, reviewText)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(sql, (customer_id, restaurant_id, rating, review_text))
+        
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 def update_cart_quantity(customer_id, cart_id, action):
     conn = get_db_connection()
@@ -192,12 +268,12 @@ def update_cart_quantity(customer_id, cart_id, action):
     
     if action == 'increase':
         qty += 1
-        total_amt += float(unit_price)
+        total_amt += unit_price
         cursor.execute("UPDATE CART SET quantity = %s, totalAmount = %s WHERE cartId = %s", (qty, total_amt, cart_id))
     elif action == 'decrease':
         if qty > 1:
             qty -= 1
-            total_amt -= float(unit_price)
+            total_amt -= unit_price
             cursor.execute("UPDATE CART SET quantity = %s, totalAmount = %s WHERE cartId = %s", (qty, total_amt, cart_id))
         else:
             # If they hit 0, remove it entirely

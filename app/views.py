@@ -161,3 +161,35 @@ def checkout():
     else:
         flash('There was an issue processing your order internally. Please try checking out again.', 'error')
         return redirect(url_for('cart'))
+
+@app.route('/bill/<int:order_id>')
+def bill(order_id):
+    """Generates the secure E-Bill digital receipt perfectly mapping Database details natively"""
+    if 'customer_id' not in session:
+        flash('Please login to view receipts.', 'error')
+        return redirect(url_for('auth'))
+        
+    receipt = models.get_order_receipt(order_id, session['customer_id'])
+    
+    if not receipt:
+        flash('Invalid Order ID or unauthorized access!', 'error')
+        return redirect(url_for('myAccount'))
+        
+    return render_template('bill.html', receipt=receipt)
+
+@app.route('/submit_review', methods=['POST'])
+def submit_review():
+    """Intercepts and strictly authorizes frontend review payloads securely mapping straight back into Models API purely"""
+    if 'customer_id' not in session:
+        flash('You must be securely logged in to leave targeted reviews.', 'error')
+        return redirect(url_for('auth'))
+        
+    restaurant_id = request.form.get('restaurant_id')
+    rating = request.form.get('rating')
+    review_text = request.form.get('review_text')
+    
+    # Process instantly backwards to the DB Driver natively
+    models.submit_review(session['customer_id'], restaurant_id, rating, review_text)
+    
+    flash('Thank you! Your feedback has been brilliantly published!', 'success')
+    return redirect(url_for('myAccount'))

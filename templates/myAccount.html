@@ -82,7 +82,56 @@
                     </div>
                     <div class="order-details">
                         <p><strong>Items:</strong> {{ order.items_summary }}</p>
-                        <p><strong>Total:</strong> Rs. {{ order.totalAmount }}</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px;">
+                            <p style="margin:0;"><strong>Total:</strong> Rs. {{ order.totalAmount }}</p>
+                            <a href="/bill/{{ order.orderId }}"
+                                style="text-decoration:none; color:#FFAA00; font-weight:bold; border:1px solid #FFAA00; padding:6px 15px; border-radius:4px; font-size:0.9rem; transition:0.2s;"
+                                onmouseover="this.style.background='#FFAA00'; this.style.color='#fff';"
+                                onmouseout="this.style.background='transparent'; this.style.color='#FFAA00';"><i
+                                    class="fa-solid fa-receipt"></i> Get E-Bill</a>
+                        </div>
+
+                        {% if order.existing_rating %}
+                        <div style="margin-top:20px; border-top:1px dashed #ddd; padding-top:15px;">
+                            <p style="font-weight:bold; color:#555; font-size:0.95rem; margin-bottom:10px;"><i
+                                    class="fa-solid fa-star" style="color:#FFAA00;"></i> Your Review for {{
+                                order.restaurantName }}:</p>
+                            <div style="background:#fdfdfd; padding:15px; border-radius:6px; border:1px solid #eee;">
+                                <div style="color:#FFAA00; margin-bottom:8px; font-size:14px;">
+                                    {% for _ in range(order.existing_rating) %}
+                                    <i class="fa-solid fa-star"></i>
+                                    {% endfor %}
+                                    {% for _ in range(5 - order.existing_rating) %}
+                                    <i class="fa-regular fa-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <p style="color:#666; font-size:0.95rem; margin:0; font-style:italic; line-height:1.5;">
+                                    "{{ order.existing_review }}"</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <details style="margin-top:20px; border-top:1px dashed #ddd; padding-top:15px; cursor:pointer;">
+                            <summary style="font-weight:bold; color:#555; font-size:0.95rem; outline:none;"><i
+                                    class="fa-solid fa-star" style="color:#FFAA00;"></i> Rate <b>{{ order.restaurantName
+                                    }}</b></summary>
+                            <form action="/submit_review" method="POST"
+                                style="margin-top:15px; background:#fafafa; padding:15px; border-radius:8px; border:1px solid #eee;">
+                                <input type="hidden" name="restaurant_id" value="{{ order.restaurantId }}">
+                                <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                                    <label for="rating" style="font-size:0.9rem; font-weight:600; color:#444;">Select
+                                        Rating (1-5):</label>
+                                    <input type="number" name="rating" min="1" max="5" value="5" required
+                                        style="width:60px; padding:6px; border:1px solid #ccc; border-radius:4px; text-align:center;">
+                                </div>
+                                <textarea name="review_text" placeholder="Tell us how the food was..." required
+                                    style="width:100%; box-sizing:border-box; padding:12px; border:1px solid #ccc; border-radius:4px; font-family:inherit; resize:vertical; min-height:70px; margin-bottom:10px;"></textarea>
+                                <button type="submit"
+                                    style="background:#FFAA00; color:#fff; border:none; padding:10px 15px; border-radius:4px; font-weight:bold; cursor:pointer; width:100%; transition:0.2s;"
+                                    onmouseover="this.style.background='#e69900';"
+                                    onmouseout="this.style.background='#FFAA00';">Submit Review</button>
+                            </form>
+                        </details>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
