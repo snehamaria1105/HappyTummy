@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt #HT{{ receipt.orderId }} - HappyTummy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fdfdfd;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+
+        .invoice-box {
+            max-width: 700px;
+            margin: auto;
+            padding: 50px;
+            background: #fff;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border-radius: 8px;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 25px;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .logo-colored {
+            color: #FFAA00;
+        }
+
+        .invoice-title {
+            text-align: right;
+        }
+
+        .invoice-title h1 {
+            margin: 0;
+            color: #222;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .invoice-title p {
+            margin: 5px 0 0;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+        }
+
+        .info-block {
+            width: 45%;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-block strong {
+            color: #222;
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 45px;
+        }
+
+        th {
+            background: #fafafa;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+            color: #444;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .totals {
+            margin-top: 35px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .totals-table {
+            width: 45%;
+        }
+
+        .totals-table td {
+            border: none;
+            padding: 10px 15px;
+            color: #666;
+        }
+
+        .totals-table .grand-total {
+            font-weight: 700;
+            color: #222;
+            font-size: 18px;
+            border-top: 2px solid #eee;
+            background: #fafafa;
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            background: #FFAA00;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 170, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #e69900;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 170, 0, 0.3);
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #444;
+            border: 1px solid #ddd;
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: #f9f9f9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-color: #ccc;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .invoice-box {
+                border: none;
+                box-shadow: none;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="controls no-print">
+        <a href="/restaurants" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Home</a>
+        <a href="/myAccount" class="btn btn-outline"><i class="fa-solid fa-user"></i> My Orders</a>
+        <button onclick="window.print()" class="btn"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+    </div>
+
+    <div class="invoice-box">
+        <div class="invoice-header">
+            <div class="logo">Happy<span class="logo-colored">Tummy</span></div>
+            <div class="invoice-title">
+                <h1>Tax Invoice</h1>
+                <p>Order ID: <b>#HT-{{ receipt.orderId }}</b></p>
+                <p>Date: {{ receipt.timestamp.strftime('%d %B %Y - %I:%M %p') }}</p>
+                <p>Status: <b style="color:#FFAA00;">{{ receipt.status }}</b></p>
+            </div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-block">
+                <strong>Billed To:</strong>
+                {{ receipt.fname }} {{ receipt.lname }}<br>
+                {{ receipt.houseName }}, {{ receipt.street }}<br>
+                {{ receipt.city }} - {{ receipt.pincode }}<br>
+                <i class="fa-solid fa-phone" style="font-size:12px; margin-top:8px;"></i> {{ receipt.phone }}
+            </div>
+            <div class="info-block text-right">
+                <strong>Ordered From:</strong>
+                {{ receipt.restaurantName }}<br>
+                {{ receipt.location }}<br>
+                <br>
+                <strong>Payment Method:</strong><br>
+                {{ receipt.paymentMode }}
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Description</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in receipt.order_items %}
+                <tr>
+                    <td><b>{{ item.itemName }}</b></td>
+                    <td class="text-center">{{ item.quantity }}</td>
+                    <td class="text-right">Rs. {{ item.price }}</td>
+                    <td class="text-right"><b>Rs. {{ item.price * item.quantity }}</b></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <table class="totals-table">
+                <tr>
+                    <td>Subtotal</td>
+                    <td class="text-right">Rs. {{ receipt.orderTotal }}</td>
+                </tr>
+                <tr>
+                    <td>Delivery Fee</td>
+                    <td class="text-right">Included</td>
+                </tr>
+                <tr class="grand-total">
+                    <td>Grand Total</td>
+                    <td class="text-right">Rs. {{ receipt.orderTotal }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="footer">
+            <b>Thank you for ordering with HappyTummy!</b><br><br>
+            If you have any questions about this receipt, please contact <i>support@happytummy.com</i><br>
+            This is a computer generated invoice and requires no signature.
+        </div>
+    </div>
+
+</body>
+
+</html>
